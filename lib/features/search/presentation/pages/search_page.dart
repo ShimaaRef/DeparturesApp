@@ -1,4 +1,5 @@
 import 'package:departures_app/shared/di/service_locator.dart' as sl;
+import 'package:departures_app/shared/dls/search_bar_full_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -55,68 +56,21 @@ class _SearchPageBodyState extends State<SearchPageBody> {
       body: SafeArea(
         child: Column(
           children: [
-            // 🔝 Header
-            Container(
-              height: 72,
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: const BoxDecoration(
-                color: Color(0xFFFFFFFF),
-                borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back),
-                    iconSize: 24,
-                    color: Color(0xFF191F25),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: TextField(
-                      controller: _controller,
-                      autofocus: true,
-                      onChanged: _onChanged,
-                      keyboardType: TextInputType.text,
-                      textCapitalization: TextCapitalization.none,
-                      enableSuggestions: true,
-                      style: const TextStyle(
-                        color: Color(0xFF191F25),
-                        fontSize: 16,
-                      ),
-                      cursorColor: Color(0xFF191F25),
-                      decoration: const InputDecoration(
-                        hintText: 'Search for station',
-                        hintStyle: TextStyle(
-                          color: Color(0xFF666F7A),
-                          fontSize: 16,
-                        ),
-                        border: InputBorder.none,
-                        isDense: true,
-                        contentPadding: EdgeInsets.symmetric(vertical: 10),
-                      ),
-                    ),
-                  ),
-                  if (showClear)
-                    IconButton(
-                      icon: const Icon(Icons.clear),
-                      iconSize: 24,
-                      color: Color(0xFF191F25),
-                      onPressed: () {
-                        _controller.clear();
-                        _onChanged('');
-                      },
-                    ),
-                ],
-              ),
+            // 🔍 Search bar using the shared component
+            SearchBarFullScreen(
+              controller: _controller,
+              onChanged: _onChanged,
+              showLeadingIcon: true,
+              show3rdTrailingIcon: showClear,
+              showDivider: true,
+              labelText: '', // empty when not in "supporting text" mode
+              onTrailingPressed: () {
+                _controller.clear();
+                _onChanged('');
+              },
             ),
 
-            // Divider under search bar
-            const Divider(height: 1, thickness: 1, color: Color(0xFFCED2DA)),
-
-            // Results or states
+            // 🔽 Search results / states
             Expanded(
               child: BlocBuilder<SearchBloc, SearchState>(
                 builder: (context, state) {
@@ -138,7 +92,7 @@ class _SearchPageBodyState extends State<SearchPageBody> {
                     return Center(child: Text(state.message));
                   }
 
-                  return const SizedBox.shrink(); // initial empty
+                  return const SizedBox.shrink(); // empty state
                 },
               ),
             ),

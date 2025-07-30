@@ -20,6 +20,7 @@ class DepartureApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'BVG Departures',
+      debugShowCheckedModeBanner: false,
       theme: appTheme,
       home: BlocProvider(
         create: (_) => di.sl<DepartureBloc>(),
