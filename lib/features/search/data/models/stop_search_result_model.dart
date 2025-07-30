@@ -8,18 +8,10 @@ class StopSearchResultModel extends StopSearchResult {
   });
 
   factory StopSearchResultModel.fromJson(Map<String, dynamic> json) {
-    final List<dynamic> lines = json['lines'] ?? [];
-
-    final modes = lines
-        .map<String>((line) => line['mode']?.toString() ?? '')
-        .toSet()
-        .where((m) => m.isNotEmpty)
-        .toList();
-
     return StopSearchResultModel(
       id: json['id'] ?? '',
       name: json['name'] ?? '',
-      modes: modes,
+      modes: const [], // No modes in /stops?query= response
     );
   }
 }

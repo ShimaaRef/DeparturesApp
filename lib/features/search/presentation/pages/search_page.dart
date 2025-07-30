@@ -56,21 +56,21 @@ class _SearchPageBodyState extends State<SearchPageBody> {
       body: SafeArea(
         child: Column(
           children: [
-            // 🔍 Search bar using the shared component
+            // Search bar
             SearchBarFullScreen(
               controller: _controller,
               onChanged: _onChanged,
               showLeadingIcon: true,
               show3rdTrailingIcon: showClear,
               showDivider: true,
-              labelText: '', // empty when not in "supporting text" mode
+              labelText: '',
               onTrailingPressed: () {
                 _controller.clear();
                 _onChanged('');
               },
             ),
 
-            // 🔽 Search results / states
+            // Search results
             Expanded(
               child: BlocBuilder<SearchBloc, SearchState>(
                 builder: (context, state) {
@@ -92,7 +92,7 @@ class _SearchPageBodyState extends State<SearchPageBody> {
                     return Center(child: Text(state.message));
                   }
 
-                  return const SizedBox.shrink(); // empty state
+                  return const SizedBox.shrink();
                 },
               ),
             ),
