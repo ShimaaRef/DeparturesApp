@@ -1,3 +1,4 @@
+import 'package:departures_app/features/search/presentation/widgets/empty_state.dart';
 import 'package:departures_app/shared/di/service_locator.dart' as sl;
 import 'package:departures_app/shared/dls/search_bar_full_screen.dart';
 import 'package:flutter/material.dart';
@@ -56,7 +57,6 @@ class _SearchPageBodyState extends State<SearchPageBody> {
       body: SafeArea(
         child: Column(
           children: [
-            // Search bar
             SearchBarFullScreen(
               controller: _controller,
               onChanged: _onChanged,
@@ -69,14 +69,15 @@ class _SearchPageBodyState extends State<SearchPageBody> {
                 _onChanged('');
               },
             ),
-
-            // Search results
             Expanded(
               child: BlocBuilder<SearchBloc, SearchState>(
                 builder: (context, state) {
                   if (state is SearchLoading) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (state is SearchLoaded) {
+                    if (state.results.isEmpty) {
+                      return const EmptyState();
+                    }
                     return ListView.builder(
                       itemCount: state.results.length,
                       itemBuilder: (context, index) {
@@ -91,7 +92,6 @@ class _SearchPageBodyState extends State<SearchPageBody> {
                   } else if (state is SearchError) {
                     return Center(child: Text(state.message));
                   }
-
                   return const SizedBox.shrink();
                 },
               ),
